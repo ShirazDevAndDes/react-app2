@@ -5,8 +5,6 @@ services:
       dockerfile: Dockerfile
     container_name: react-initial-app
     restart: unless-stopped
-    networks:
-      - traefik-net
     labels:
       # Enable Traefik reverse proxy for this service
       - "traefik.enable=true"
@@ -26,12 +24,3 @@ services:
 
       # Internal container port that Nginx is listening on
       - "traefik.http.services.react-app.loadbalancer.server.port=80"
-
-      # Ensure Traefik routes through the shared Docker network
-      - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik-public}"
-
-networks:
-  traefik-net:
-    # Connects to your VPS Traefik network (often named traefik-public, traefik_network, or web)
-    name: ${TRAEFIK_NETWORK:-traefik-public}
-    external: true
