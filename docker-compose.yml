@@ -1,12 +1,9 @@
 services:
-  react-app:
+  react_app:
     build:
       context: .
       dockerfile: Dockerfile
-    image: react-initial:latest
     container_name: react-initial-app
-    ports:
-      - "8080:80"
     restart: unless-stopped
     networks:
       - traefik-net
