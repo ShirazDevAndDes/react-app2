@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: react_app
-    restart: always
+    restart: unless-stopped
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.reactapp.rule=Host(`websitemakerssolutions.com`) || Host(`www.websitemakerssolutions.com`)"
