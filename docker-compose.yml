@@ -6,22 +6,11 @@ services:
     container_name: react_app
     restart: always
     labels:
-      # Enable Traefik reverse proxy for this service
       - "traefik.enable=true"
-
-      # ==============================================================================
-      # DOMAIN NAME CONFIGURATION:
-      # Option 1 (Recommended): Set APP_DOMAIN in your .env file or Docker Manager UI.
-      # Option 2: Replace `${APP_DOMAIN:-yourdomain.com}` directly below with:
-      #           Host(`yourdomain.com`) or Host(`app.yourdomain.com`)
-      # ==============================================================================
       - "traefik.http.routers.react-app.rule=Host(`${APP_DOMAIN:-yourdomain.com}`)"
-
-      # HTTPS entrypoint (default for Traefik SSL)
       - "traefik.http.routers.react-app.entrypoints=websecure"
-      - "traefik.http.routers.react-app.tls=true"
       - "traefik.http.routers.react-app.tls.certresolver=${CERT_RESOLVER:-letsencrypt}"
-
-      # Internal container port that Nginx is listening on
       - "traefik.http.services.react-app.loadbalancer.server.port=80"
+
+
 
