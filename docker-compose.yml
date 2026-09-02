@@ -2,9 +2,9 @@ services:
   react-app:
     image: react-initial:latest
     container_name: react-initial-app
+    restart: unless-stopped
     ports:
       - "8080:80"
-    restart: unless-stopped
     networks:
       - traefik-net
     labels:
