@@ -1,31 +1,38 @@
-# Build Stage
-FROM node:22-alpine AS build
+# ==========================================
+# Stage 1: Build the React application
+# ==========================================
+FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-# Copy package configuration files
+# Copy dependency definitions
 COPY package*.json ./
 
-# Install dependencies cleanly
+# Install clean dependencies
 RUN npm ci
 
-# Copy project files
+# Copy project source files
 COPY . .
 
-# Build application
+# Build production assets
 RUN npm run build
 
-# Production Stage
-FROM nginx:alpine
+# ==========================================
+# Stage 2: Serve application using Nginx
+# ==========================================
+FROM nginx:alpine AS production
 
-# Copy Nginx configuration file for port 3001 and SPA routing
+# Remove default nginx static files
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy custom nginx configuration for SPA routing & caching
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy compiled static assets from build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+# Copy built static assets from builder stage
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Expose port 3001 for Dokploy
-EXPOSE 3001
+# Expose HTTP port
+EXPOSE 80
 
-# Run Nginx in foreground
+# Run nginx in foreground
 CMD ["nginx", "-g", "daemon off;"]
