@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: react-initial-app
-    restart: unless-stopped
+    container_name: react_app
+    restart: always
     labels:
       # Enable Traefik reverse proxy for this service
       - "traefik.enable=true"
@@ -24,3 +24,4 @@ services:
 
       # Internal container port that Nginx is listening on
       - "traefik.http.services.react-app.loadbalancer.server.port=80"
+
