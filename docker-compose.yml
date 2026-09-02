@@ -1,5 +1,5 @@
 services:
-  react_app:
+  web:
     build:
       context: .
       dockerfile: Dockerfile
