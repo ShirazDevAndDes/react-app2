@@ -1,5 +1,5 @@
 services:
-  web:
+  react_app:
     build:
       context: .
       dockerfile: Dockerfile
@@ -7,7 +7,9 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.reactapp.rule=Host(`websitemakerssolutions.com`) || Host(`www.websitemakerssolutions.com`)"
+      - "traefik.http.routers.reactapp.rule=Host(`${APP_DOMAIN:-yourdomain.com}`)"
       - "traefik.http.routers.reactapp.entrypoints=websecure"
-      - "traefik.http.routers.reactapp.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.reactapp.tls.certresolver=${CERT_RESOLVER:-letsencrypt}"
       - "traefik.http.services.reactapp.loadbalancer.server.port=80"
+
+      
