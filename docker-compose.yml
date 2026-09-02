@@ -7,10 +7,7 @@ services:
     restart: always
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.react-app.rule=Host(`${APP_DOMAIN:-yourdomain.com}`)"
-      - "traefik.http.routers.react-app.entrypoints=websecure"
-      - "traefik.http.routers.react-app.tls.certresolver=${CERT_RESOLVER:-letsencrypt}"
-      - "traefik.http.services.react-app.loadbalancer.server.port=80"
-
-
-
+      - "traefik.http.routers.reactapp.rule=Host(`${APP_DOMAIN:-yourdomain.com}`)"
+      - "traefik.http.routers.reactapp.entrypoints=websecure"
+      - "traefik.http.routers.reactapp.tls.certresolver=${CERT_RESOLVER:-letsencrypt}"
+      - "traefik.http.services.reactapp.loadbalancer.server.port=80"
