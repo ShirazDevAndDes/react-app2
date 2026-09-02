@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: react-initial:latest
-    container_name: react-initial-app
+    image: react-app:latest
+    container_name: react-app
     restart: unless-stopped
     networks:
       - traefik-net
