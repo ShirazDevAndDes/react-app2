@@ -33,5 +33,5 @@ services:
 networks:
   traefik-net:
     # Connects to your VPS Traefik network (often named traefik-public, traefik_network, or web)
-    name: ${TRAEFIK_NETWORK:-traefik-public}
+    name: ${TRAEFIK_NETWORK:-traefik-proxy}
     external: true
