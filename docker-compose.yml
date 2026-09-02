@@ -1,13 +1,40 @@
 services:
-  web:
+  react-app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: react_app
-    restart: always
+    image: react-initial:latest
+    container_name: react-initial-app
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    networks:
+      - traefik-net
     labels:
+      # Enable Traefik reverse proxy for this service
       - "traefik.enable=true"
-      - "traefik.http.routers.reactapp.rule=Host(`websitemakerssolutions.com`) || Host(`www.websitemakerssolutions.com`)"
-      - "traefik.http.routers.reactapp.entrypoints=websecure"
-      - "traefik.http.routers.reactapp.tls.certresolver=letsencrypt"
-      - "traefik.http.services.reactapp.loadbalancer.server.port=80"
+
+      # ==============================================================================
+      # DOMAIN NAME CONFIGURATION:
+      # Option 1 (Recommended): Set APP_DOMAIN in your .env file or Docker Manager UI.
+      # Option 2: Replace `${APP_DOMAIN:-yourdomain.com}` directly below with:
+      #           Host(`yourdomain.com`) or Host(`app.yourdomain.com`)
+      # ==============================================================================
+      - "traefik.http.routers.react-app.rule=Host(`${APP_DOMAIN:-yourdomain.com}`)"
+
+      # HTTPS entrypoint (default for Traefik SSL)
+      - "traefik.http.routers.react-app.entrypoints=websecure"
+      - "traefik.http.routers.react-app.tls=true"
+      - "traefik.http.routers.react-app.tls.certresolver=${CERT_RESOLVER:-letsencrypt}"
+
+      # Internal container port that Nginx is listening on
+      - "traefik.http.services.react-app.loadbalancer.server.port=80"
+
+      # Ensure Traefik routes through the shared Docker network
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik-public}"
+
+networks:
+  traefik-net:
+    # Connects to your VPS Traefik network (often named traefik-public, traefik_network, or web)
+    name: ${TRAEFIK_NETWORK:-traefik-public}
+    external: true
